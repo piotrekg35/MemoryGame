@@ -14,16 +14,21 @@ namespace zad1
     {
         Form1 okno1;
         Form3 okno3;
-        public Form2(Form1 f1, string imie)
+        Form4 okno4;
+        int t1=10;
+        int t2=2;
+        string poziom="Łatwy";
+        public Form2(Form1 f1)
         {
             InitializeComponent();
             okno1 = f1;
-            label1.Text = "Witaj " + imie;
+            label1.Text = "Witaj " + f1.textBox1.Text;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            okno4 = new Form4(t1,t2,poziom);
+            okno4.ShowDialog();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -34,8 +39,10 @@ namespace zad1
         private void button2_Click(object sender, EventArgs e)
         {
             okno3 = new Form3();
-            okno3.Show();
-            this.Hide();
+            okno3.ShowDialog();
+            t1 = Int32.Parse(okno3.numericUpDown1.Value.ToString());
+            t2 = Int32.Parse(okno3.numericUpDown2.Value.ToString());
+            poziom = okno3.comboBox1.Text;
         }
     }
 }
