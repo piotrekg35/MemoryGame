@@ -18,16 +18,18 @@ namespace zad1
         int t1=10;
         int t2=2;
         string poziom="Łatwy";
+        string imie;
         public Form2(Form1 f1)
         {
             InitializeComponent();
             okno1 = f1;
-            label1.Text = "Witaj " + f1.textBox1.Text;
+            imie = f1.textBox1.Text;
+            label1.Text = "Witaj " + imie;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            okno4 = new Form4(t1,t2,poziom);
+            okno4 = new Form4(t1,t2,poziom, imie);
             okno4.ShowDialog();
         }
 

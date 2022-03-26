@@ -19,18 +19,22 @@ namespace zad1
         int t1;
         int t2 ;
         string poziom;
+        string imie;
         int liczba_kart;
         List<PictureBox> list;
         List<Image> obrazki;
         int karty_odkryte;
         PictureBox karta1=new PictureBox();
         PictureBox karta2 = new PictureBox();
-        public Form4(int time1,int time2,string str)
+        int liczba_pomyłek = 0;
+        int wynik;
+        public Form4(int time1,int time2,string str,string im)
         {
             InitializeComponent();
             t1 = time1;
             t2 = time2;
             poziom = str;
+            imie= im;
             numericUpDown1.Value = t2;
             label1.Text = "00:00";
             if (poziom == "Łatwy") liczba_kart = 12;
@@ -110,17 +114,16 @@ namespace zad1
             else if (min < 10 && (czas - min * 60) >= 10) label1.Text = "0" + min + ":" + (czas - min * 60);
             else if (min >= 10 && (czas - min * 60) < 10) label1.Text = min + ":0" + (czas - min * 60);
             else label1.Text =  min + ":" + (czas - min * 60);
-            if (liczba_kart == 0) this.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(button1.Text=="Stop")
+            if(button1.Text=="Stop" && karty_odkryte==0)
             {
                 timer1.Stop();
                 button1.Text = "Start";
             }
-            else
+            else if (button1.Text == "Start" && karty_odkryte == 0)
             {
                 timer1.Start();
                 button1.Text = "Stop";
@@ -153,7 +156,22 @@ namespace zad1
                 {
                     karta1.Image = obrazki[0];
                     karta2.Image = obrazki[0];
+                    liczba_pomyłek++;
                 }
+            }
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+            if(liczba_kart == 0)
+            {
+                timer1.Stop();
+                liczba_kart = -1;
+                wynik = 2000 - czas - liczba_pomyłek * 100;
+                Form5 okno5 = new Form5(imie, wynik);
+                okno5.ShowDialog();
+                this.Close();
+               
             }
         }
     }
