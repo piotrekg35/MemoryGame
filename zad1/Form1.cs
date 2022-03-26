@@ -21,8 +21,9 @@ namespace zad1
         private void button1_Click(object sender, EventArgs e)
         {
             okno2= new Form2(this);
-            okno2.Show();
             this.Hide();
+            okno2.ShowDialog();
+            this.Close();
         }
     }
 }

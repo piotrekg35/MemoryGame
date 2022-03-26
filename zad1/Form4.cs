@@ -47,6 +47,7 @@ namespace zad1
                 list[i].Image = pictureBox1.Image;
                 list[i].Size = new Size(90,90);
                 list[i].Visible = true;
+                
                 this.Controls.Add(list[i]);
             }
             int x=0, y=0, x0=0, y0=0, p = 0;
