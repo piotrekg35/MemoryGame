@@ -17,6 +17,7 @@ namespace zad1
         int t1;
         int t2 ;
         string poziom;
+        int liczba_kart;
         public Form4(int time1,int time2,string str)
         {
             InitializeComponent();
@@ -25,6 +26,26 @@ namespace zad1
             poziom = str;
             numericUpDown1.Value = t2;
             label1.Text = "00:00";
+            if (poziom == "Łatwy") liczba_kart = 12;
+            else if (poziom == "Średni") liczba_kart = 24;
+            else liczba_kart = 48;
+            List<PictureBox> list = new List<PictureBox>();
+            for (int i = 0; i < liczba_kart; i++)
+            {
+                list.Add(new PictureBox());
+                list[i].Image = pictureBox1.Image;
+                list[i].Size = new Size(90,90);
+                list[i].Visible = true;
+                this.Controls.Add(list[i]);
+            }
+            int x=0, y=0, x0=0, y0=0, p = 0;
+            if (poziom == "Łatwy") { x = 3; y = 4; x0 = 126; y0 = 262; }
+            else if(poziom =="Średni") { x = 4; y = 6; x0 = 126; y0 = 126; }
+            else { x = 6; y = 8; x0 = 30; y0 = 30; }
+            for (int i = 0; i < x; i++)
+                for(int j = 0; j < y; j++)
+                    list[p++].Location = new Point(y0+j*96, x0 + i * 96);
+
         }
 
         private void button2_Click(object sender, EventArgs e)
