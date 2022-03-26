@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace zad1
 {
@@ -18,6 +19,9 @@ namespace zad1
         int t2 ;
         string poziom;
         int liczba_kart;
+        List<PictureBox> list;
+        List<Image> obrazki;
+        bool odkryte = true;
         public Form4(int time1,int time2,string str)
         {
             InitializeComponent();
@@ -29,7 +33,7 @@ namespace zad1
             if (poziom == "Łatwy") liczba_kart = 12;
             else if (poziom == "Średni") liczba_kart = 24;
             else liczba_kart = 48;
-            List<PictureBox> list = new List<PictureBox>();
+            list = new List<PictureBox>();
             for (int i = 0; i < liczba_kart; i++)
             {
                 list.Add(new PictureBox());
@@ -46,6 +50,25 @@ namespace zad1
                 for(int j = 0; j < y; j++)
                     list[p++].Location = new Point(y0+j*96, x0 + i * 96);
 
+            string directory = @"C:\Users\piotr\OneDrive\Pulpit\cs\lab3\zad1\zad1\obrazki";
+            obrazki = new List<Image>();
+            foreach (string myFile in Directory.GetFiles(directory, "*.png", SearchOption.AllDirectories))
+            {
+                obrazki.Add(Image.FromFile(myFile));
+            }
+            List<Image> obrazki_do_oddania = new List<Image>();
+            for (int i = 0; i < liczba_kart / 2; i++) { obrazki_do_oddania.Add(obrazki[i+1]); obrazki_do_oddania.Add(obrazki[i+1]); }
+            var random = new Random();
+            int ran_num = random.Next();
+            foreach (PictureBox pb in list)
+            {
+                pb.Image = obrazki_do_oddania[(ran_num % obrazki_do_oddania.Count)];
+                pb.BackgroundImage = obrazki_do_oddania[(ran_num % obrazki_do_oddania.Count)];
+                obrazki_do_oddania.RemoveAt(ran_num % obrazki_do_oddania.Count);
+                ran_num = random.Next();
+
+            }
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -56,6 +79,7 @@ namespace zad1
         private void timer1_Tick(object sender, EventArgs e)
         {
             czas++;
+            if (czas == t1) { foreach (PictureBox pb in list) pb.Image = obrazki[0]; odkryte = false; }
             double m = czas / 60;
             int min = Convert.ToInt32(Math.Floor(m));
             if (min < 10 && (czas - min * 60)<10) label1.Text = "0" + min + ":0" + (czas - min * 60);
