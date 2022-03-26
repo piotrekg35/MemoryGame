@@ -15,13 +15,16 @@ namespace zad1
 
     {
         int czas = 0;
+        int czas_odkrycia = 0;
         int t1;
         int t2 ;
         string poziom;
         int liczba_kart;
         List<PictureBox> list;
         List<Image> obrazki;
-        bool odkryte = true;
+        int karty_odkryte;
+        PictureBox karta1=new PictureBox();
+        PictureBox karta2 = new PictureBox();
         public Form4(int time1,int time2,string str)
         {
             InitializeComponent();
@@ -68,7 +71,28 @@ namespace zad1
                 ran_num = random.Next();
 
             }
-            
+            karty_odkryte = liczba_kart;
+            foreach (var pb in list)
+            {
+                pb.Click += (sender, e) => {
+                    if (czas >= t1 && karty_odkryte == 0 && pb.Image == obrazki[0])
+                    {
+                        pb.Image = pb.BackgroundImage;
+                        karta1 = pb;
+                        karty_odkryte++;
+                    }
+                    else if (czas >= t1 && karty_odkryte == 1 && pb.Image == obrazki[0])
+                    {
+                        pb.Image = pb.BackgroundImage;
+                        karta2 = pb;
+                        karty_odkryte++;
+                        timer2.Enabled = true;
+                        timer2.Start();
+
+                    }
+                };
+            }
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -79,13 +103,14 @@ namespace zad1
         private void timer1_Tick(object sender, EventArgs e)
         {
             czas++;
-            if (czas == t1) { foreach (PictureBox pb in list) pb.Image = obrazki[0]; odkryte = false; }
+            if (czas == t1) { foreach (PictureBox pb in list) pb.Image = obrazki[0]; karty_odkryte =0; }
             double m = czas / 60;
             int min = Convert.ToInt32(Math.Floor(m));
             if (min < 10 && (czas - min * 60)<10) label1.Text = "0" + min + ":0" + (czas - min * 60);
             else if (min < 10 && (czas - min * 60) >= 10) label1.Text = "0" + min + ":" + (czas - min * 60);
             else if (min >= 10 && (czas - min * 60) < 10) label1.Text = min + ":0" + (czas - min * 60);
             else label1.Text =  min + ":" + (czas - min * 60);
+            if (liczba_kart == 0) this.Close();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -101,6 +126,35 @@ namespace zad1
                 button1.Text = "Stop";
             }
             
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            czas_odkrycia++;
+            if(czas_odkrycia == t2)
+            {
+                czas_odkrycia = 0;
+                timer2.Enabled = false;
+                karty_odkryte = 0;
+                if(karta1.BackgroundImage==karta2.BackgroundImage)
+                {
+                    liczba_kart -= 2;
+                    karta1.Visible = false;
+                    karta2.Visible = false;
+                    list.Remove(karta1);
+                    list.Remove(karta2);
+                }
+                else
+                {
+                    karta1.Image = obrazki[0];
+                    karta2.Image = obrazki[0];
+                }
+            }
         }
     }
 }
