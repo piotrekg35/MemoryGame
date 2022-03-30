@@ -28,6 +28,7 @@ namespace zad1
         PictureBox karta2 = new PictureBox();
         int liczba_pomyłek = 0;
         int wynik;
+        bool czas_zastopowany = false;
         public Form4(int time1,int time2,string str,string im)
         {
             InitializeComponent();
@@ -45,18 +46,21 @@ namespace zad1
             {
                 list.Add(new PictureBox());
                 list[i].Image = pictureBox1.Image;
-                list[i].Size = new Size(90,90);
+                if (poziom == "Łatwy") list[i].Size = new Size(180, 180);
+                else if (poziom == "Średni") list[i].Size = new Size(110, 110);
+                else list[i].Size = new Size(90, 90);
                 list[i].Visible = true;
-                
+                list[i].SizeMode = PictureBoxSizeMode.StretchImage;
+
                 this.Controls.Add(list[i]);
             }
-            int x=0, y=0, x0=0, y0=0, p = 0;
-            if (poziom == "Łatwy") { x = 3; y = 4; x0 = 126; y0 = 262; }
-            else if(poziom =="Średni") { x = 4; y = 6; x0 = 126; y0 = 126; }
-            else { x = 6; y = 8; x0 = 30; y0 = 30; }
+            int x=0, y=0, x0=30, y0=30, p = 0,m=0;
+            if (poziom == "Łatwy") { x = 3; y = 4; m = 192; }
+            else if(poziom =="Średni") { x = 4; y = 6; m = 130; }
+            else { x = 6; y = 8; m = 96; }
             for (int i = 0; i < x; i++)
                 for(int j = 0; j < y; j++)
-                    list[p++].Location = new Point(y0+j*96, x0 + i * 96);
+                    list[p++].Location = new Point(y0+j*m, x0 + i * m);
 
             string directory = @"C:\Users\piotr\OneDrive\Pulpit\cs\lab3\zad1\zad1\obrazki";
             obrazki = new List<Image>();
@@ -80,13 +84,13 @@ namespace zad1
             foreach (var pb in list)
             {
                 pb.Click += (sender, e) => {
-                    if (czas >= t1 && karty_odkryte == 0 && pb.Image == obrazki[0])
+                    if (czas >= t1 && karty_odkryte == 0 && pb.Image == obrazki[0] && !czas_zastopowany)
                     {
                         pb.Image = pb.BackgroundImage;
                         karta1 = pb;
                         karty_odkryte++;
                     }
-                    else if (czas >= t1 && karty_odkryte == 1 && pb.Image == obrazki[0])
+                    else if (czas >= t1 && karty_odkryte == 1 && pb.Image == obrazki[0] && !czas_zastopowany)
                     {
                         pb.Image = pb.BackgroundImage;
                         karta2 = pb;
@@ -119,15 +123,17 @@ namespace zad1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(button1.Text=="Stop" && karty_odkryte==0)
+            if(czas_zastopowany == false && karty_odkryte==0)
             {
                 timer1.Stop();
                 button1.Text = "Start";
+                czas_zastopowany = true;
             }
-            else if (button1.Text == "Start" && karty_odkryte == 0)
+            else if (czas_zastopowany == true && karty_odkryte == 0)
             {
                 timer1.Start();
                 button1.Text = "Stop";
+                czas_zastopowany=false;
             }
             
         }
