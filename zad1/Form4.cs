@@ -15,7 +15,8 @@ namespace zad1
 
     {
         int czas = 0;
-        int czas_odkrycia = 0;
+        int czas_odkrycia_niepoprawnych = 0;
+        int czas_odkrycia_poprawnych = 0;
         int t1;
         int t2 ;
         string poziom;
@@ -95,8 +96,16 @@ namespace zad1
                         pb.Image = pb.BackgroundImage;
                         karta2 = pb;
                         karty_odkryte++;
-                        timer2.Enabled = true;
-                        timer2.Start();
+                        if(karta1.BackgroundImage == karta2.BackgroundImage)
+                        {
+                            timer4.Enabled = true;
+                            timer4.Start();
+                        }
+                        else
+                        {
+                            timer2.Enabled = true;
+                            timer2.Start();
+                        }
 
                     }
                 };
@@ -145,26 +154,16 @@ namespace zad1
 
         private void timer2_Tick(object sender, EventArgs e)
         {
-            czas_odkrycia++;
-            if(czas_odkrycia == t2)
+            czas_odkrycia_niepoprawnych++;
+            if(czas_odkrycia_niepoprawnych == t2)
             {
-                czas_odkrycia = 0;
+                czas_odkrycia_niepoprawnych = 0;
                 timer2.Enabled = false;
                 karty_odkryte = 0;
-                if(karta1.BackgroundImage==karta2.BackgroundImage)
-                {
-                    liczba_kart -= 2;
-                    karta1.Visible = false;
-                    karta2.Visible = false;
-                    list.Remove(karta1);
-                    list.Remove(karta2);
-                }
-                else
-                {
-                    karta1.Image = obrazki[0];
-                    karta2.Image = obrazki[0];
-                    liczba_pomyłek++;
-                }
+                karta1.Image = obrazki[0];
+                karta2.Image = obrazki[0];
+                liczba_pomyłek++;
+               
             }
         }
 
@@ -175,10 +174,28 @@ namespace zad1
                 timer1.Stop();
                 liczba_kart = -1;
                 wynik = 2000 - czas - liczba_pomyłek * 100;
+                if (wynik < 0) wynik = 0;
                 Form5 okno5 = new Form5(imie, wynik);
                 okno5.ShowDialog();
                 this.Close();
                
+            }
+        }
+
+        private void timer4_Tick(object sender, EventArgs e)
+        {
+            czas_odkrycia_poprawnych++;
+            if(czas_odkrycia_poprawnych==2)
+            {
+                czas_odkrycia_poprawnych=0;
+                timer4.Enabled = false;
+                karty_odkryte = 0;
+                liczba_kart -= 2;
+                karta1.Visible = false;
+                karta2.Visible = false;
+                list.Remove(karta1);
+                list.Remove(karta2);
+                this.Refresh();
             }
         }
     }
