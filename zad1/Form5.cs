@@ -25,14 +25,9 @@ namespace zad1
             StreamWriter file = new StreamWriter(@"C:\Users\piotr\OneDrive\Pulpit\cs\lab3\zad1\zad1\ranking.txt", append: true);
             file.WriteLine(w+","+i);
             file.Close();
-            string text = System.IO.File.ReadAllText(@"C:\Users\piotr\OneDrive\Pulpit\cs\lab3\zad1\zad1\ranking.txt");
-            string[] lines = text.Split('\n');
-            List<string> lines2 = new List<string>();
-            foreach(string line in lines)lines2.Add(line);
-            lines2.Sort();
-            lines2.Reverse();
-            int j = 0;
-            while(j<lines2.Count && j<5) listView1.Items.Add(lines2[j++]);
+            List<string> top = new List<string>();
+            top = LeaderBoard.getTopFromFile(@"C:\Users\piotr\OneDrive\Pulpit\cs\lab3\zad1\zad1\ranking.txt");
+            foreach(var p in top) listView1.Items.Add(p);
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -42,8 +42,8 @@ namespace zad1
         {
             okno3 = new Form3();
             okno3.ShowDialog();
-            t1 = Int32.Parse(okno3.numericUpDown1.Value.ToString());
-            t2 = Int32.Parse(okno3.numericUpDown2.Value.ToString());
+            t1 = (int)okno3.numericUpDown1.Value;
+            t2 = (int)okno3.numericUpDown2.Value;
             poziom = okno3.comboBox1.Text;
         }
     }
